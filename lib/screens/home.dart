@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungpinthong/screens/register.dart';
 import 'package:ungpinthong/utility/my_style.dart';
 
 class Home extends StatefulWidget {
@@ -34,7 +35,14 @@ class _HomeState extends State<Home> {
           'Sign Up',
           style: TextStyle(color: MyStyle().textColor),
         ),
-        onPressed: () {},
+        onPressed: () {
+          print('You Click SignUp');
+
+          // Create Route Arrow Back
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext context) {return Register();});
+              Navigator.of(context).push(materialPageRoute);
+        },
       ),
     );
   }
