@@ -107,18 +107,22 @@ class _HomeState extends State<Home> {
             ),
           ),
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                showLogo(),
-                showAppName(),
-                userText(),
-                passwordText(),
-                SizedBox(
-                  height: 8.0,
-                ),
-                showButton(),
-              ],
+            child: Container(
+              padding: MyStyle().myPadding,
+              color: Color.fromARGB(50, 0, 0, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  showLogo(),
+                  showAppName(),
+                  userText(),
+                  passwordText(),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  showButton(),
+                ],
+              ),
             ),
           ),
         ),
