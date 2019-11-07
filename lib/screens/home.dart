@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ungpinthong/screens/register.dart';
+import 'package:ungpinthong/utility/my_alert.dart';
 import 'package:ungpinthong/utility/my_style.dart';
 
 class Home extends StatefulWidget {
@@ -9,6 +10,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Field
+  final formKey = GlobalKey<FormState>();
+  String user, password;
 
   // Method
 
@@ -21,9 +24,25 @@ class _HomeState extends State<Home> {
           'Sign In',
           style: MyStyle().myWhiteTextStyle,
         ),
-        onPressed: () {},
+        onPressed: () {
+          formKey.currentState.save();
+          print('user = $user, password = $password');
+          checkAuthen();
+        },
       ),
     );
+  }
+
+  Future<void> checkAuthen()async{
+
+    if ((user.isEmpty) || (password.isEmpty)) {
+      // Have Space
+      normalDialog(context, 'Have Space', 'Please Fill All Every Blank');
+    } else {
+      // No Space
+      
+    }
+
   }
 
   Widget signUpButton() {
@@ -80,6 +99,9 @@ class _HomeState extends State<Home> {
           labelText: 'User :',
           labelStyle: TextStyle(color: Colors.white),
         ),
+        onSaved: (value) {
+          user = value.trim();
+        },
       ),
     );
   }
@@ -91,10 +113,13 @@ class _HomeState extends State<Home> {
         style: TextStyle(color: Colors.white),
         obscureText: true,
         decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white)),
-            labelText: 'Password :',
-            labelStyle: TextStyle(color: Colors.white)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          labelText: 'Password :',
+          labelStyle: TextStyle(color: Colors.white),
+        ),onSaved: (value){
+          password = value.trim();
+        },
       ),
     );
   }
@@ -135,18 +160,21 @@ class _HomeState extends State<Home> {
             child: Container(
               padding: MyStyle().myPadding,
               color: Color.fromARGB(100, 0, 0, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  showLogo(),
-                  showAppName(),
-                  userText(),
-                  passwordText(),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  showButton(),
-                ],
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    showLogo(),
+                    showAppName(),
+                    userText(),
+                    passwordText(),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    showButton(),
+                  ],
+                ),
               ),
             ),
           ),
