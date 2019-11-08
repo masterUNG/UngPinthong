@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:ungpinthong/models/user_model.dart';
+import 'package:ungpinthong/screens/my_service.dart';
 import 'package:ungpinthong/screens/register.dart';
 import 'package:ungpinthong/utility/my_alert.dart';
 import 'package:ungpinthong/utility/my_style.dart';
@@ -12,8 +18,26 @@ class _HomeState extends State<Home> {
   // Field
   final formKey = GlobalKey<FormState>();
   String user, password;
+  UserModel userModel;
 
   // Method
+  @override
+  void initState() {
+    super.initState();
+    checkInternet();
+  }
+
+  Future<void> checkInternet() async {
+    try {
+      var result = await InternetAddress.lookup('google.com');
+      if ((result.isNotEmpty) && (result[0].rawAddress.isNotEmpty)) {
+        print('Internet Connected');
+      }
+    } catch (e) {
+      
+      normalDialog(context, 'Internet False', 'Please Check Internet');
+    }
+  }
 
   Widget signInButton() {
     return Expanded(
@@ -33,16 +57,40 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> checkAuthen()async{
-
+  Future<void> checkAuthen() async {
     if ((user.isEmpty) || (password.isEmpty)) {
       // Have Space
       normalDialog(context, 'Have Space', 'Please Fill All Every Blank');
     } else {
       // No Space
-      
-    }
 
+      String url =
+          'https://www.androidthai.in.th/pint/getUserWhereUserMaster.php?isAdd=true&User=$user';
+      var response = await http.get(url, headers: {'Aceept': 'application/json'});
+      var result = json.decode(response.body);
+      print('result = $result');
+
+      if (result.toString() == 'null') {
+        normalDialog(context, 'User False', 'No $user in my Database');
+      } else {
+        for (var map in result) {
+          print('map = $map');
+          userModel = UserModel.fromAPI(map);
+
+          // Check Password
+          if (password == userModel.password) {
+
+            // Move to MyService
+            MaterialPageRoute materialPageRoute = MaterialPageRoute(builder: (BuildContext context){return MyService(userModel: userModel,);});
+            Navigator.of(context).pushAndRemoveUntil(materialPageRoute, (Route<dynamic> route){return false;});
+
+          } else {
+            normalDialog(
+                context, 'Password False', 'Please Try Agains Password');
+          }
+        }
+      }
+    } // if
   }
 
   Widget signUpButton() {
@@ -88,6 +136,7 @@ class _HomeState extends State<Home> {
     return Container(
       width: 250.0,
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           focusedBorder: UnderlineInputBorder(
@@ -117,7 +166,8 @@ class _HomeState extends State<Home> {
               UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
           labelText: 'Password :',
           labelStyle: TextStyle(color: Colors.white),
-        ),onSaved: (value){
+        ),
+        onSaved: (value) {
           password = value.trim();
         },
       ),
