@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungpinthong/utility/my_style.dart';
 
 class Page2 extends StatefulWidget {
   @override
@@ -6,10 +7,63 @@ class Page2 extends StatefulWidget {
 }
 
 class _Page2State extends State<Page2> {
+  // Field
+  String codeString = '';
+
+  // Method
+  Widget readQRbutton() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: RaisedButton.icon(
+                icon: Icon(Icons.photo_camera),
+                label: Text('Read QR or Bar code'),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget codeReaded() {
+    return Center(
+      child: Text(
+        'Code Readed $codeString',
+        style: TextStyle(
+          color: MyStyle().textColor,
+          fontSize: MyStyle().h2,
+        ),
+      ),
+    );
+  }
+
+  Widget headTitle() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Read QR or Bar Code',
+          style: TextStyle(fontSize: MyStyle().h1),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('This is page2'),
+      child: Stack(
+        children: <Widget>[
+          headTitle(),
+          codeReaded(),
+          readQRbutton(),
+        ],
+      ),
     );
   }
 }
