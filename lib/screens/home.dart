@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
   Widget userText() {
     return Container(
       width: 250.0,
-      child: TextFormField(
+      child: TextFormField(initialValue: 'Doramon',
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
